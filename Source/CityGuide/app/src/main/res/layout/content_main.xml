@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/city"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Main"
+    tools:showIn="@layout/activity_main">
+
+
+    <EditText
+        android:layout_width="220dp"
+        android:layout_height="35dp"
+        android:id="@+id/editText_food"
+        android:layout_marginLeft="75dp"
+        android:hint="Search here"
+        android:background="@drawable/edit_text_style"
+        android:layout_above="@+id/button_search"
+        android:layout_alignEnd="@+id/button_search" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:text="Search"
+        android:background="#a3c2c2"
+        android:id="@+id/button_search"
+        android:layout_marginTop="5dp"
+        android:onClick="getPlaces"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
