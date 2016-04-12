@@ -50,5 +50,14 @@
             android:text="Large Text"
             android:id="@+id/textView_contact"
             android:layout_weight="0.07" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Schedule It"
+            android:id="@+id/button_schedule"
+            android:layout_gravity="right"
+            android:onClick="schedule"
+            android:layout_weight="0.07" />
     </LinearLayout>
 </RelativeLayout>
