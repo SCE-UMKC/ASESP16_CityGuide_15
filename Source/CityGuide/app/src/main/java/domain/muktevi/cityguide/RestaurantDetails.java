@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import domain.muktevi.cityguide.beans.Constants;
+import domain.muktevi.cityguide.beans.Schedule;
 import domain.muktevi.cityguide.beans.Venue;
 import domain.muktevi.cityguide.domain.muktevi.cityguide.photos.beans.PhotoResult;
 
@@ -36,7 +39,10 @@ public class RestaurantDetails extends AppCompatActivity {
     private TextView address;
     private TextView contact;
     public static String respJson = "";
-    public static String picUrl="";
+    public static String picUrl="https://foursquare.com/img/categories/food/default_64.png";
+    public static String venueName;
+    public static String USER = "domain.muktevi.cityguide.USER";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +61,9 @@ public class RestaurantDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        USER = intent.getStringExtra(RestaurantSRP.USER);
         final Venue venue = (Venue) bundle.get(Constants.SERIAL_KEY);
+        venueName = venue.getName();
         imageView = (ImageView)findViewById(R.id.imageView_hotel_image);
         name = (TextView) findViewById(R.id.textView_name);
         address = (TextView) findViewById(R.id.textView_address);
@@ -63,7 +71,7 @@ public class RestaurantDetails extends AppCompatActivity {
         if (venue == null){
             Log.e("Oops!!","");
         }else{
-            String resp= getImages(venue.getId());
+            /*String resp= getImages(venue.getId());
             try {
                 JSONObject jsonObject = new JSONObject(resp);
                 JSONArray pics = jsonObject.getJSONObject("response").getJSONObject("photos").getJSONArray("items");
@@ -71,7 +79,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -98,7 +106,7 @@ public class RestaurantDetails extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                Log.e("exception form Server!",e.getMessage());
+                Log.e("exception form Server!", e.getMessage());
             }
 
             @Override
@@ -110,4 +118,41 @@ public class RestaurantDetails extends AppCompatActivity {
         return respJson;
     }
 
+    public void schedule (View view){
+
+        Intent intent = new Intent(this, MySchedule.class);
+        final Intent mainIntent = new Intent(this,Home.class);
+        Schedule schedule = new Schedule();
+        Gson gson = new Gson();
+        schedule.setUser(USER);
+        schedule.setVenueName(venueName);
+        String scheduleJSON = gson.toJson(schedule);
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, scheduleJSON);
+        String requestUrl = "https://api.mlab.com/api/1/databases/ase_assignment/collections/schedule?apiKey=T4RmCJ4GWaqs1nRLHnFoA--K8wrdzly4";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(requestUrl).post(body).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Log.e("Error from the service",e.getMessage());
+                mainIntent.putExtra(USER, USER);
+                startActivity(mainIntent);
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                final String respJson = response.body().string();
+                Log.i("Json String: ", respJson);
+                if (respJson.isEmpty() ){
+                    Log.e("response json is empty",respJson);
+                }
+
+            }
+        });
+
+        intent.putExtra(USER,USER);
+        startActivity(intent);
+    }
 }
