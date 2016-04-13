@@ -26,9 +26,10 @@ import domain.muktevi.cityguide.beans.Venue;
 
 public class RestaurantSRP extends AppCompatActivity {
 
-
+    public static String USER = "domain.muktevi.cityguide.USER";
     public static String imageUrl = "https://foursquare.com/img/categories/food/default_64.png";
     public static String msg = "You have opted : ";
+    public static String category_id = "";
     public static ListView listView;
     private Gson gson;
 
@@ -39,11 +40,25 @@ public class RestaurantSRP extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        String foodType = intent.getStringExtra(Main.FOOD);
+        String category = intent.getStringExtra(Home.CATEGORY);
+        USER = intent.getStringExtra(Home.USER);
 
-        String requestUrl = Constants.URL+"near=Kansas City&"+"query="+foodType+"&"+"limit=10&"+"client_id="+ Constants.CLIENT_ID+"&"+"client_secret="+Constants.CLIENT_SECRET+"&v=20160212";
+        switch (category){
+            case "FOOD": category_id = "4d4b7105d754a06374d81259";
+                break;
+            case "EVENTS": category_id = "4d4b7105d754a06373d81259";
+                break;
+            case "PLACES" : category_id = "4d4b7104d754a06370d81259";
+                break;
+            case "TRANSPORT": category_id = "4d4b7105d754a06379d81259";
+                break;
+
+        }
+
+        String requestUrl = Constants.URL+"near=Kansas City&"+"categoryId="+category_id+"&"+"limit=5&"+"client_id="+Constants.CLIENT_ID+"&"+"client_secret="+Constants.CLIENT_SECRET+"&v=20160212";
         OkHttpClient client = new OkHttpClient();
 
+        // Date date = new Date();
         Request request = new Request.Builder().url(requestUrl).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -80,11 +95,13 @@ public class RestaurantSRP extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //String optedMessage = msg + String.valueOf(adapterView.getItemAtPosition(position));
                 Venue venue = (Venue) adapterView.getItemAtPosition(position);
                 Intent intent = new Intent(RestaurantSRP.this, RestaurantDetails.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constants.SERIAL_KEY,venue);
                 intent.putExtras(bundle);
+                intent.putExtra(USER, USER);
                 startActivity(intent);
             }
         });

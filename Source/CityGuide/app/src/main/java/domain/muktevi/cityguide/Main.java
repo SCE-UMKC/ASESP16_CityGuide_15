@@ -29,17 +29,29 @@ public class Main extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-		// this is main 
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    public void getPlaces(View view){
+    /*public void getPlaces(View view){
         Intent intent = new Intent(this,RestaurantSRP.class);
         EditText food = (EditText) findViewById(R.id.editText_food);
         intent.putExtra(FOOD,food.getText().toString());
         startActivity(intent);
+    }*/
+
+    public void doRegister(View view){
+        Intent intent = new Intent(this,Register.class);
+        startActivity(intent);
     }
+
+    public void doLogin(View view){
+        Intent intent = new Intent(this,Login.class);
+        startActivity(intent);
+
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
