@@ -36,8 +36,7 @@ public class RestaurantDetails extends AppCompatActivity {
     private TextView address;
     private TextView contact;
     public static String respJson = "";
-    public static String picUrl="https://foursquare.com/img/categories/food/default_64.png";
-    public static String venuName;
+    public static String picUrl="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +56,6 @@ public class RestaurantDetails extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         final Venue venue = (Venue) bundle.get(Constants.SERIAL_KEY);
-        venuName = venue.getName();
         imageView = (ImageView)findViewById(R.id.imageView_hotel_image);
         name = (TextView) findViewById(R.id.textView_name);
         address = (TextView) findViewById(R.id.textView_address);
@@ -65,7 +63,7 @@ public class RestaurantDetails extends AppCompatActivity {
         if (venue == null){
             Log.e("Oops!!","");
         }else{
-            /*String resp= getImages(venue.getId());
+            String resp= getImages(venue.getId());
             try {
                 JSONObject jsonObject = new JSONObject(resp);
                 JSONArray pics = jsonObject.getJSONObject("response").getJSONObject("photos").getJSONArray("items");
@@ -73,7 +71,7 @@ public class RestaurantDetails extends AppCompatActivity {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            }*/
+            }
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -100,7 +98,7 @@ public class RestaurantDetails extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                Log.e("exception form Server!", e.getMessage());
+                Log.e("exception form Server!",e.getMessage());
             }
 
             @Override
@@ -112,9 +110,4 @@ public class RestaurantDetails extends AppCompatActivity {
         return respJson;
     }
 
-    public void schedule (View view){
-        Intent intent = new Intent(this,MySchedule.class);
-        intent.putExtra("venuName",venuName);
-        startActivity(intent);
-    }
 }

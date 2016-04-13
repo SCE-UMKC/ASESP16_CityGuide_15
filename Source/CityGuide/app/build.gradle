@@ -27,6 +27,4 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'org.mongodb:mongo-java-driver:3.2.2'
-
 }

@@ -34,7 +34,6 @@ public class MyAdapter extends ArrayAdapter<Object> {
         TextView textView = (TextView) view.findViewById(R.id.textView_hotel_name);
         textView.setText(venue.getName());
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView_icon);
-
         Picasso.with(getContext()).load(imageUrl).into(imageView);
         return view;
     }
