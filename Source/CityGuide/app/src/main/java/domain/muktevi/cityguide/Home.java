@@ -18,24 +18,20 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        TextView txtname=(TextView) findViewById(R.id.name);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        USER = intent.getStringExtra(Login.USER);
-        TextView textView = (TextView) findViewById(R.id.textView_user);
-        textView.setText(USER);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        if (intent.getStringExtra(Login.USER) != null)
+        {
+            USER = intent.getStringExtra(Login.USER);
+        }
+        else if (intent.getStringExtra(MySchedule.USER) != null)
+        {
+            USER = intent.getStringExtra(MySchedule.USER);
+        }
+        txtname.setText("Welcome" + USER + "!!");
 
-
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     public void getEvents(View view) {
@@ -68,6 +64,12 @@ public class Home extends AppCompatActivity {
     }
     public void gotoSchedule(View view){
         Intent intent = new Intent(this,MySchedule.class);
+        intent.putExtra(USER, USER);
+        startActivity(intent);
+    }
+
+    public void getTrends(View view) {
+        Intent intent = new Intent(this,TwitterTrends.class);
         intent.putExtra(USER, USER);
         startActivity(intent);
     }

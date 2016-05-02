@@ -23,11 +23,9 @@ import domain.muktevi.cityguide.R;
 import domain.muktevi.cityguide.RestaurantSRP;
 
 public class Main extends AppCompatActivity {
+    private CallbackManager callbackManager;
     private TextView info;
     private LoginButton loginButton;
-    private CallbackManager callbackManager;
-
-    public static String FOOD = "domain.muktevi.cityguide.FOOD";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -63,14 +61,14 @@ public class Main extends AppCompatActivity {
             }
         });
 
+
     }
+
 
     private void redirect() {
         Intent intent = new Intent(Main.this,Home.class);
         startActivity(intent);
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -112,9 +110,9 @@ public class Main extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
 }

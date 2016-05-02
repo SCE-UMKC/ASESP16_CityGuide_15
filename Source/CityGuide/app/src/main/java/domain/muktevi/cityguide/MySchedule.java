@@ -1,14 +1,20 @@
 package domain.muktevi.cityguide;
 
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,19 +44,16 @@ public class MySchedule extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_schedule);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         Intent intent = getIntent();
-        USER = intent.getStringExtra(Home.USER);
+        if(intent.getStringExtra(Home.USER)!= null) {
+            USER = intent.getStringExtra(Home.USER);
+        }
+        else if(intent.getStringExtra(MySchedule.USER) != null){
+            USER = intent.getStringExtra(MySchedule.USER);
+        }
+        else if(intent.getStringExtra(RestaurantDetails.USER) != null){
+            USER = intent.getStringExtra(RestaurantDetails.USER);
+        }
         String urlEncodedName = URLEncoder.encode(USER);
         String requestUrl = "https://api.mlab.com/api/1/databases/ase_assignment/collections/schedule?q=%7B%22user%22%3A%22" + urlEncodedName + "%22%7D&apiKey=T4RmCJ4GWaqs1nRLHnFoA--K8wrdzly4";
         OkHttpClient client = new OkHttpClient();
@@ -78,6 +81,10 @@ public class MySchedule extends AppCompatActivity {
                         JSONObject obj = (JSONObject) responseJson.get(i);
                         schedule.setUser((String) obj.get("user"));
                         schedule.setVenueName((String) obj.get("venuename"));
+                        schedule.setDate((String) obj.get("date"));
+                        schedule.setTime((String) obj.get("time"));
+                        schedule.setCategory((String) obj.get("category"));
+                        schedule.setOid(obj.getJSONObject("_id").getString("$oid"));
                         scheduleArray[i] = schedule;
                     }
                     runOnUiThread(new Runnable() {
@@ -93,10 +100,37 @@ public class MySchedule extends AppCompatActivity {
 
             }
 
-
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_schedule, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_home:
+                homeNavigate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void homeNavigate() {
+        Intent intent=new Intent(this, Home.class);
+        intent.putExtra(USER, USER);
+        startActivity(intent);
     }
 
     private void populateSchedule(Schedule[] scheduleArray) {

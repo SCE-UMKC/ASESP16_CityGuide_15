@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -20,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import domain.muktevi.cityguide.beans.Category;
 import domain.muktevi.cityguide.beans.Constants;
 import domain.muktevi.cityguide.beans.RestaurantResult;
 import domain.muktevi.cityguide.beans.Venue;
@@ -27,6 +31,7 @@ import domain.muktevi.cityguide.beans.Venue;
 public class RestaurantSRP extends AppCompatActivity {
 
     public static String USER = "domain.muktevi.cityguide.USER";
+    public static String CATEGORY = "domain.muktevi.cityguide.CATEGORY";
     public static String imageUrl = "https://foursquare.com/img/categories/food/default_64.png";
     public static String msg = "You have opted : ";
     public static String category_id = "";
@@ -39,6 +44,7 @@ public class RestaurantSRP extends AppCompatActivity {
         setContentView(R.layout.activity_restaurant_srp);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ImageView img_cat = (ImageView) findViewById(R.id.imageView_icon);
         Intent intent = getIntent();
         String category = intent.getStringExtra(Home.CATEGORY);
         USER = intent.getStringExtra(Home.USER);
@@ -55,9 +61,8 @@ public class RestaurantSRP extends AppCompatActivity {
 
         }
 
-        String requestUrl = Constants.URL+"near=Kansas City&"+"categoryId="+category_id+"&"+"limit=5&"+"client_id="+Constants.CLIENT_ID+"&"+"client_secret="+Constants.CLIENT_SECRET+"&v=20160212";
+        String requestUrl = Constants.URL+"near=Kansas City&"+"categoryId="+category_id+"&"+"limit=15&"+"client_id="+Constants.CLIENT_ID+"&"+"client_secret="+Constants.CLIENT_SECRET+"&v=20160212";
         OkHttpClient client = new OkHttpClient();
-
         // Date date = new Date();
         Request request = new Request.Builder().url(requestUrl).build();
         client.newCall(request).enqueue(new Callback() {
@@ -85,11 +90,37 @@ public class RestaurantSRP extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_schedule, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_home:
+                homeNavigate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void homeNavigate() {
+        Intent intent=new Intent(this, Home.class);
+        intent.putExtra(USER, USER);
+        startActivity(intent);
     }
 
     public void populateListView(Venue[] venuList) {
-        final ArrayAdapter adapter = new MyAdapter(RestaurantSRP.this, venuList);
+        final ArrayAdapter adapter = new MyAdapter(RestaurantSRP.this, venuList,category_id);
         listView = (ListView) findViewById(R.id.theListView);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -102,6 +133,7 @@ public class RestaurantSRP extends AppCompatActivity {
                 bundle.putSerializable(Constants.SERIAL_KEY,venue);
                 intent.putExtras(bundle);
                 intent.putExtra(USER, USER);
+                intent.putExtra(CATEGORY,category_id);
                 startActivity(intent);
             }
         });

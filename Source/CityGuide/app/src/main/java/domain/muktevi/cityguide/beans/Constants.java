@@ -10,4 +10,5 @@ public class Constants {
     public static final String CLIENT_SECRET = "3A3ZTVHPSK4VU2T2YJLY0SSD43IH1Z32JAQNAEV4DWMLOSPZ";
     public static final String URL = "https://api.foursquare.com/v2/venues/search?";
     public static final String PHOTO_URL = "https://api.foursquare.com/v2/venues/";
+    public static final String TRENDS_URL = "http://samplease-env.us-west-2.elasticbeanstalk.com/trends/";
 }
