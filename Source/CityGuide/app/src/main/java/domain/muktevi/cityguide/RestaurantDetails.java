@@ -7,7 +7,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +41,7 @@ public class RestaurantDetails extends AppCompatActivity {
     private TextView name;
     private TextView address;
     private TextView contact;
+    private String category_id;
     public static String respJson = "";
     public static String picUrl="https://foursquare.com/img/categories/food/default_64.png";
     public static String venueName;
@@ -49,22 +53,13 @@ public class RestaurantDetails extends AppCompatActivity {
         setContentView(R.layout.activity_restaurant_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         USER = intent.getStringExtra(RestaurantSRP.USER);
+        category_id = intent.getStringExtra(RestaurantSRP.CATEGORY);
         final Venue venue = (Venue) bundle.get(Constants.SERIAL_KEY);
         venueName = venue.getName();
-        imageView = (ImageView)findViewById(R.id.imageView_hotel_image);
+        //imageView = (ImageView)findViewById(R.id.imageView_hotel_image);
         name = (TextView) findViewById(R.id.textView_name);
         address = (TextView) findViewById(R.id.textView_address);
         contact = (TextView) findViewById(R.id.textView_contact);
@@ -83,18 +78,45 @@ public class RestaurantDetails extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Picasso.with(RestaurantDetails.this).load(picUrl).into(imageView);
+                    //Picasso.with(RestaurantDetails.this).load(picUrl).into(imageView);
                     name.setText(venue.getName());
                     String addressString = "";
                     for (String s: venue.getLocation().getFormattedAddress()){
                         addressString = addressString+s;
                     }
                     address.setText(addressString);
-                    contact.setText(venue.getContact().getFormattedPhone());
+                    contact.setText("Conatct  : "+venue.getContact().getFormattedPhone());
                 }
             });
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_schedule, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_home:
+                homeNavigate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void homeNavigate() {
+        Intent intent=new Intent(this, Home.class);
+        intent.putExtra(USER, USER);
+        startActivity(intent);
     }
 
     private String getImages(String id) {
@@ -119,15 +141,18 @@ public class RestaurantDetails extends AppCompatActivity {
     }
 
     public void schedule (View view){
-
+        final EditText date= (EditText) findViewById(R.id.txtview_date);
+        final EditText time= (EditText) findViewById(R.id.txtview_time);
         Intent intent = new Intent(this, MySchedule.class);
         final Intent mainIntent = new Intent(this,Home.class);
         Schedule schedule = new Schedule();
         Gson gson = new Gson();
         schedule.setUser(USER);
         schedule.setVenueName(venueName);
+        schedule.setCategory(category_id);
+        schedule.setDate(date.getText().toString());
+        schedule.setTime(time.getText().toString());
         String scheduleJSON = gson.toJson(schedule);
-
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, scheduleJSON);
         String requestUrl = "https://api.mlab.com/api/1/databases/ase_assignment/collections/schedule?apiKey=T4RmCJ4GWaqs1nRLHnFoA--K8wrdzly4";
@@ -154,5 +179,17 @@ public class RestaurantDetails extends AppCompatActivity {
 
         intent.putExtra(USER,USER);
         startActivity(intent);
+    }
+
+    public void showDatePickerDialog(View view) {
+        TextView txtdate= (TextView) findViewById(R.id.txtview_date);
+        DatePickerFragment newFragment= new DatePickerFragment(txtdate);
+        newFragment.show(getFragmentManager(), "datepicker");
+
+    }
+    public void showTimePickerDialog(View v) {
+        TextView txttime= (TextView) findViewById(R.id.txtview_time);
+        TimePickerFragment newFragment = new TimePickerFragment(txttime);
+        newFragment.show(getFragmentManager(), "timePicker");
     }
 }
