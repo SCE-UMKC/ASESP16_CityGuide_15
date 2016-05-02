@@ -97,7 +97,10 @@ public class Main extends AppCompatActivity {
     }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

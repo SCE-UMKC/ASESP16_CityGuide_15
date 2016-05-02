@@ -7,8 +7,7 @@
     <string name="title_activity_home">Home</string>
     <string name="title_activity_my_schedule">MySchedule</string>
     <string name="title_activity_login">Login</string>
-<<<<<<< HEAD
+
     <string name="facebook_app_id">209117842801424</string>
-=======
->>>>>>> origin/master
+
 </resources>

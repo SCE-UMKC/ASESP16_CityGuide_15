@@ -35,7 +35,7 @@
         android:onClick="doLogin"
         android:layout_alignTop="@+id/button_register"
         android:layout_toStartOf="@+id/button_register" />
-
+<<<<<<< HEAD
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/fb_login"
@@ -45,5 +45,6 @@
         android:layout_marginTop="79dp"
         android:layout_alignStart="@+id/button_signin"
         android:layout_alignEnd="@+id/button_register" />
-
+=======
+>>>>>>> origin/master
 </RelativeLayout>

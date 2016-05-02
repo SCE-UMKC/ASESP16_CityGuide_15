@@ -32,9 +32,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.mongodb:mongo-java-driver:3.2.2'
-<<<<<<< HEAD
+
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
-=======
->>>>>>> origin/master
+
 
 }
