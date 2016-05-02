@@ -16,6 +16,7 @@
     <ImageButton
         android:layout_width="400dp"
         android:layout_height="150dp"
+
         android:src ="@drawable/maps_image"
         android:onClick="map"/>
     <ScrollView

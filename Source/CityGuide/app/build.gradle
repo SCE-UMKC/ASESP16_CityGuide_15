@@ -37,5 +37,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.mongodb:mongo-java-driver:3.2.2'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+
     compile 'com.google.android.gms:play-services:8.4.0'
+
 }

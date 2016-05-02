@@ -69,7 +69,11 @@ public class Home extends AppCompatActivity {
     }
 
     public void getTrends(View view) {
-        Intent intent = new Intent(this,TwitterTrends.class);
+
+        
+
+        Intent intent = new Intent(this,TrendsActivity.class);
+
         intent.putExtra(USER, USER);
         startActivity(intent);
     }

@@ -61,8 +61,10 @@ public class RestaurantDetails extends AppCompatActivity {
         category_id = intent.getStringExtra(RestaurantSRP.CATEGORY);
         final Venue venue = (Venue) bundle.get(Constants.SERIAL_KEY);
         venueName = venue.getName();
+
         lat = venue.getLocation().getLat();
         lon = venue.getLocation().getLng();
+
         //imageView = (ImageView)findViewById(R.id.imageView_hotel_image);
         name = (TextView) findViewById(R.id.textView_name);
         address = (TextView) findViewById(R.id.textView_address);
@@ -197,6 +199,7 @@ public class RestaurantDetails extends AppCompatActivity {
         newFragment.show(getFragmentManager(), "timePicker");
     }
 
+
     public void map(View view){
         Intent intent = new Intent(this,MapsActivity.class);
         Bundle b = new Bundle();
@@ -206,4 +209,5 @@ public class RestaurantDetails extends AppCompatActivity {
         intent.putExtras(b);
         startActivity(intent);
     }
+
 }
